@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="js/jquery.min.js?v=2.1.4"></script>
+    <script src="js/bootstrap.min.js?v=3.3.6"></script>
+    <script src="js/content.min.js?v=1.0.0"></script>
+    <script src="js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+    <script src="js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
+    <script src="js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+    <script type="text/javascript" src="http://tajs.qq.com/stats?sId=9051096" charset="UTF-8"></script>
+    <script type="text/javascript" src="js/table.js" charset="UTF-8"></script>
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+    <link href="css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+    <link href="css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+    <link href="css/animate.min.css" rel="stylesheet">
+    <link href="css/style.min862f.css?v=4.1.0" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="https://cdn.staticfile.org/vue-resource/1.5.1/vue-resource.min.js"></script>
+    <script type="text/javascript">
+
+
+        /* var TableInit = function (tableId,url) {
+             var oTableInit = new Object();
+             //初始化Table
+             oTableInit.Init = function () {
+                 $(tableId).bootstrapTable({
+                     url: url,         //请求后台的URL（*）
+                     method: 'get',                      //请求方式（*）
+                     toolbar: '#toolbar',                //工具按钮用哪个容器
+                     striped: true,                      //是否显示行间隔色
+                     cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+                     pagination: true,                   //是否显示分页（*）
+                     sortable: false,                     //是否启用排序
+                     sortOrder: "asc",                   //排序方式
+                     queryParams: oTableInit.queryParams,//传递参数（*）
+                     sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
+                     pageNumber:1,                       //初始化加载第一页，默认第一页
+                     pageSize: 10,                       //每页的记录行数（*）
+                     pageList: [10, 25, 50, 100],        //可供选择的每页的行数（*）
+                     search: true,                       //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
+                     strictSearch: true,
+                     showColumns: true,                  //是否显示所有的列
+                     showRefresh: true,                  //是否显示刷新按钮
+                     minimumCountColumns: 2,             //最少允许的列数
+                     clickToSelect: true,                //是否启用点击选中行
+                     height: 500,                        //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+                     uniqueId: "ID",                     //每一行的唯一标识，一般为主键列
+                     showToggle:true,                    //是否显示详细视图和列表视图的切换按钮
+                     cardView: false,                    //是否显示详细视图
+                     detailView: false,                   //是否显示父子表
+                     columns: [{
+                         checkbox: true
+                     }, {
+                         field: 'id',
+                         title: '部门名称'
+                     }, {
+                         field: 'roleName',
+                         title: '上级部门'
+                     } ]
+                 });
+             };
+
+             //得到查询的参数
+             oTableInit.queryParams = function (params) {
+                 var temp = {   //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
+                     limit: params.limit,   //页面大小
+                     offset: params.offset,  //页码
+                     departmentname: $("#txt_search_departmentname").val(),
+                     statu: $("#txt_search_statu").val(),
+                     pageNumber: 1,
+                     pageSize: 10
+                 };
+                 return temp;
+             };
+             return oTableInit;
+         };
+
+
+         var ButtonInit = function () {
+             var oInit = new Object();
+             var postdata = {};
+
+             oInit.Init = function () {
+                 //初始化页面上面的按钮事件
+             };
+
+             return oInit;
+         };
+ */
+        /* function initTable(){
+                          $('#table').bootstrapTable({
+                                method: 'get',
+                                toolbar: '#toolbar',    //工具按钮用哪个容器
+                                striped: true,      //是否显示行间隔色
+                                cache: false,      //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+                                pagination: true,     //是否显示分页（*）
+                                sortable: false,      //是否启用排序
+                                 sortOrder: "asc",     //排序方式
+                                 pageNumber:1,      //初始化加载第一页，默认第一页
+                                 pageSize: 10,      //每页的记录行数（*）
+                                 pageList: [10, 25, 50, 100],  //可供选择的每页的行数（*）
+                                 url: "http://127.0.0.1:8085/sysRole",//这个接口需要处理bootstrap table传递的固定参数
+                                 queryParamsType:'', //默认值为 'limit' ,在默认情况下 传给服务端的参数为：offset,limit,sort
+                                                     // 设置为 ''  在这种情况下传给服务器的参数为：pageSize,pageNumber
+
+                              //queryParams: queryParams,//前端调用服务时，会默认传递上边提到的参数，如果需要添加自定义参数，可以自定义一个函数返回请求参数
+                              sidePagination: "server",   //分页方式：client客户端分页，server服务端分页（*）
+                                //search: true,      //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
+                              strictSearch: true,
+                                  //showColumns: true,     //是否显示所有的列
+                              //showRefresh: true,     //是否显示刷新按钮
+                              minimumCountColumns: 2,    //最少允许的列数
+                                 clickToSelect: true,    //是否启用点击选中行
+                                 searchOnEnterKey: true,
+                                 columns: [{
+                                     field: 'roleId',
+                                     title: 'id',
+                                     align: 'center'
+                              }, {
+                                      field: 'roleName',
+                                          title: '角色名称',
+                                          align: 'center'
+                                  }, {
+                                      field: 'resType',
+                                         title: '按钮',
+                                         align: 'center'
+                                 },{
+                                      field: 'ad',
+                                          title: '操作',
+                                          align: 'center',
+                                          formatter:function(value,row,index){
+                                              //通过formatter可以自定义列显示的内容
+                                              //value：当前field的值，即id
+                                              //row：当前行的数据
+                                              var a = '<a href="" >测试</a>';
+                                          }
+                                  }],
+                             pagination:true
+                         });
+                     }*/
+
+
+    </script>
+</head>
+<body class="gray-bg">
+<div id="app">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="ibox float-e-margins">
+
+            <div class="col-sm-12">
+                <!-- Example Events -->
+                <div class="example-wrap">
+                    <h4 class="example-title">事件</h4>
+                    <div class="example">
+                        <div class="alert alert-success" id="examplebtTableEventsResult" role="alert">
+                            事件结果
+                        </div>
+                        <div class="btn-group hidden-xs" id="toolbar" role="group">
+                            <button type="button" @click="addModel" class="btn btn-outline btn-default">
+                                <i class="glyphicon glyphicon-plus" aria-hidden="true"></i>
+                            </button>
+                            <button type="button"  class="btn btn-outline btn-default">
+                                <i class="glyphicon glyphicon-heart" aria-hidden="true"></i>
+                            </button>
+                            <button type="button" id="delBatch" class="btn btn-outline btn-default">
+                                <i class="glyphicon glyphicon-trash" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                        <table id="table" data-height="600" data-mobile-responsive="true">
+
+                        </table>
+                    </div>
+                </div>
+                <!-- End Example Events -->
+            </div>
+        </div>
+    </div>
+    <!-- End Panel Other -->
+
+    <!-- 添加模态框 -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel"><span>{{flag ? "新增" : "修改"}}</span></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>角色名称</label>
+                        <input type="text" v-model="roleName" class="form-control" required="required"  placeholder="角色名称">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">
+                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>关闭
+                        </button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal" @click.stop="save">
+                            <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>保存
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- 修改模态框 -->
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel"><span>修改</span></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>角色名称</label>
+                        <input type="text" name="roleName" class="form-control" id="roleName" required placeholder="角色名称">
+                        <input type="hidden" name="roleId" class="form-control" id="roleId" placeholder="角色id">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">
+                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>关闭
+                        </button>
+                        <button type="button" id="edit" class="btn btn-primary" data-dismiss="modal">
+                            <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>保存
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+<script type="text/javascript">
+
+
+    //添加模态框
+    function EditViewById(id, name) {
+        $('#editModal').modal();
+        $("#roleName").val(name);
+        $("#roleId").val(id);
+    }
+
+
+
+
+    //注册删除按钮的事件
+    function DelViewById(ids) {
+        del(ids);
+    }
+
+    function del(ids) {
+        $.ajax({
+            url: "http://127.0.0.1:8085/sysRole/" + ids,
+            type: "POST",
+            dataType: "json",
+            data: {_method: "delete"},
+            success: function (data) {
+                if (data == true) {
+                    $("#table").bootstrapTable('refresh');
+                }
+            }
+        })
+    }
+
+
+    var defaultColunms = [
+        {
+            field: 'checkStatus',
+            checkbox: true
+        },  //给多选框赋一个field值为“checkStatus”用于更改选择状态!!!!!
+
+        {
+            field: 'roleId',
+            title: 'id',
+            align: 'center'
+        }, {
+            field: 'roleName',
+            title: '角色名称',
+            align: 'center'
+        }, {
+            field: 'ad',
+            title: '操作',
+            align: 'center',
+            formatter: function (value, row, index) {
+                var result = "";
+                result += "<a href='javascript:;' class='btn btn-xs green' onclick=\"EditViewById('" + row.roleId + "', view='view')\" title='查看'><span class='glyphicon glyphicon-search'></span></a>";
+                result += "<a href='javascript:;' class='btn btn-xs blue'  onclick=\"EditViewById('" + row.roleId + "','" + row.roleName + "')\" title='编辑'><span class='glyphicon glyphicon-pencil'></span></a>";
+                result += "<a href='javascript:;' class='btn btn-xs red'  title='删除'  onclick=\"DelViewById('" + row.roleId + "')\"><span class='glyphicon glyphicon-remove'></span></a>";
+                return result;
+            }
+        }];
+
+    $(function () {
+        //1.初始化Table
+        var oTable = new TableInit('#table', 'http://127.0.0.1:8085/sysRole', defaultColunms);
+        oTable.Init();
+
+        //2.初始化Button的点击事件
+        var oButtonInit = new ButtonInit();
+        oButtonInit.Init();
+
+        //修改
+        $("#edit").on("click", function () {
+            $.ajax({
+                url: 'http://127.0.0.1:8085/sysRole',
+                dataType: 'json',
+                type: 'post',
+                data: {_method: "put", roleName: $("#roleName").val(),roleId:$("#roleId").val()},
+                success: function (data) {
+                    if (data == true) {
+                        $("#table").bootstrapTable('refresh');
+                    }
+                }
+            })
+        });
+
+
+        //删除按钮事件
+        $("#delBatch").on("click", function () {
+            var rows = $("#table").bootstrapTable('getSelections');
+            if (rows.length == 0) {// rows 主要是为了判断是否选中，下面的else内容才是主要
+                alert("请先选择要删除的记录!");
+                return;
+            } else {
+                var arrays = new Array();// 声明一个数组
+                $(rows).each(function () {// 通过获得别选中的来进行遍历
+                    arrays.push(this.roleId);// cid为获得到的整条数据中的一列
+                });
+                var ids = arrays.join(','); // 获得要删除的id
+                // 批量删除
+               del(ids);
+            }
+        })
+
+    });
+
+    var vm = new Vue({
+        el: '#app',
+        data: {
+            roleName: '',
+            flag: true
+        },
+        beforeCreate() {
+
+        },
+        methods: {
+            addModel() {
+                $('#myModal').modal();
+
+            },
+            save() {
+                this.$http.post('http://127.0.0.1:8085/sysRole', {roleName: this.roleName}, {emulateJSON: true}).then(function (res) {
+                    console.log(res)
+                    if (res.status == 200) {
+                        $("#myModal").modal('hide');
+                        $("#table").bootstrapTable('refresh');
+                    }
+                }, function (res) {
+                    console.log(res.status);
+                });
+            },
+
+            edi() {
+                $('#myModal').modal();
+            }
+
+        },
+        // 渲染后执行
+        mounted() {
+            // this.getMenus(); // 调用数据初始化函数
+        },
+    })
+
+</script>
+
+</body>
+</html>
