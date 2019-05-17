@@ -157,10 +157,14 @@
             title: 'id',
             align: 'center'
         }, {
-            field: 'roleName',
-            title: '角色名称',
+            field: 'userName',
+            title: '账号',
             align: 'center'
-        }, {
+        },  {
+            field: 'fullName',
+            title: '姓名',
+            align: 'center'
+        },{
             field: 'ad',
             title: '操作',
             align: 'center',
@@ -175,28 +179,13 @@
 
     $(function () {
         //1.初始化Table
-        var oTable = new TableInit('#table', 'http://127.0.0.1:8085/sysRole', defaultColunms);
+        var oTable = new TableInit('#table', 'http://127.0.0.1:8085/sysUser', defaultColunms);
         oTable.Init();
 
         //2.初始化Button的点击事件
         var oButtonInit = new ButtonInit();
         oButtonInit.Init();
 
-        var c = [
-            { field: 'check',  checkbox: true, formatter: function (value, row, index) {
-                    if (row.check == true) {
-                        // console.log(row.serverName);
-                        //设置选中
-                        return {  checked: true };
-                    }
-                }
-            },
-            { field: 'resName',  title: '资源名称' },
-
-        ];
-        //1.初始化Table
-        var tableTree = new TableTree('.treeTable', 'http://127.0.0.1:8085/sysPermission', c);
-        tableTree.Init();
 
         //修改
         $("#edit").on("click", function () {
