@@ -1,104 +1,420 @@
-<!DOCTYPE html>
-<html>
+<!DOCTYPE HTML>
+<html lang="zh-cn">
 
-
-<!-- Mirrored from www.zi-han.net/theme/hplus/table_bootstrap.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 20 Jan 2016 14:20:03 GMT -->
 <head>
-
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-
-    <title>H+ 后台主题UI框架 - Bootstrap Table</title>
-    <meta name="keywords" content="H+后台主题,后台bootstrap框架,会员中心主题,后台HTML,响应式后台">
-    <meta name="description" content="H+是一个完全响应式，基于Bootstrap3最新版本开发的扁平化主题，她采用了主流的左右两栏式布局，使用了Html5+CSS3等现代技术">
-
-    <link rel="shortcut icon" href="favicon.ico"> <link href="css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
-    <link href="css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
-    <link href="css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
-    <link href="css/animate.min.css" rel="stylesheet">
-    <link href="css/style.min862f.css?v=4.1.0" rel="stylesheet">
-
-
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width,initial-scale=1.0" name="viewport">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="telephone=no" name="format-detection">
+    <meta content="email=no" name="format-detection">
+    <title>系统管理</title>
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.bootcss.com/bootstrap-table/1.11.1/bootstrap-table.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/jquery-treegrid/0.2.0/css/jquery.treegrid.min.css">
 </head>
 
-<body class="gray-bg">
+<body>
+<div id="appP">
     <div class="wrapper wrapper-content animated fadeInRight">
         <div class="ibox float-e-margins">
 
-                    <div class="col-sm-12">
-                        <!-- Example Events -->
-                        <div class="example-wrap">
-                            <h4 class="example-title">事件</h4>
-                            <div class="example">
-                                <div class="alert alert-success" id="examplebtTableEventsResult" role="alert">
-                                    事件结果
-                                </div>
-                                <div class="btn-group hidden-xs" id="exampleTableEventsToolbar" role="group">
-                                    <button type="button" class="btn btn-outline btn-default">
-                                        <i class="glyphicon glyphicon-plus" aria-hidden="true"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-outline btn-default">
-                                        <i class="glyphicon glyphicon-heart" aria-hidden="true"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-outline btn-default">
-                                        <i class="glyphicon glyphicon-trash" aria-hidden="true"></i>
-                                    </button>
-                                </div>
-                                <table id="table" data-height="600" data-mobile-responsive="true">
-
-
-                                </table>
-                            </div>
+            <div class="col-sm-12">
+                <!-- Example Events -->
+                <div class="example-wrap">
+                    <h4 class="example-title"></h4>
+                    <div class="example">
+                        <div class="alert alert-success" id="examplebtTableEventsResult" role="alert">
+                            事件结果
                         </div>
-                        <!-- End Example Events -->
+                        <div class="btn-group hidden-xs" id="toolbar" role="group">
+                            <button type="button" @click="addModel" class="btn btn-outline btn-default">
+                                <i class="glyphicon glyphicon-plus" aria-hidden="true"></i>
+                            </button>
+                            <button type="button"  class="btn btn-outline btn-default">
+                                <i class="glyphicon glyphicon-heart" aria-hidden="true"></i>
+                            </button>
+                            <button type="button" id="delBatch" onclick="delBatch()" class="btn btn-outline btn-default">
+                                <i class="glyphicon glyphicon-trash" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                        <table id="table"  data-mobile-responsive="true"></table>
                     </div>
                 </div>
+                <!-- End Example Events -->
             </div>
-        <!-- End Panel Other -->
-    <script src="js/jquery.min.js?v=2.1.4"></script>
-    <script src="js/bootstrap.min.js?v=3.3.6"></script>
-    <script src="js/content.min.js?v=1.0.0"></script>
-    <script src="js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
-    <script src="js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
-    <script src="js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
-    <script src="js/demo/bootstrap-table-demo.min.js"></script>
-    <script type="text/javascript" src="http://tajs.qq.com/stats?sId=9051096" charset="UTF-8"></script>
-    <script type="text/javascript" src="js/table.js"></script>
-    <script type="text/javascript">
-        var defaultColunms = [{
-            field: 'roleId',
-            title: 'id',
-            align: 'center'
-        }, {
-            field: 'roleName',
-            title: '角色名称',
-            align: 'center'
-        }, {
-            field: 'resType',
-            title: '按钮',
-            align: 'center'
-        },{
-            field: 'ad',
-            title: '操作',
-            align: 'center',
-            formatter:function(value,row,index){
-                //通过formatter可以自定义列显示的内容
-                //value：当前field的值，即id
-                //row：当前行的数据
-                var a = '<a href="" >测试</a>';
-            }
-        }];
+        </div>
+    </div>
+    <!-- End Panel Other -->
 
-        $(function () {
-            //1.初始化Table
-            var oTable = new TableInit('#table','http://127.0.0.1:8085/sysRole',defaultColunms);
-            oTable.Init();
+    <!-- 添加模态框 -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel"><span>新增</span></h4>
+                </div>
+                <form id="formData">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>资源名称</label>
+                        <input type="text" name="resName" class="form-control" required="required"  placeholder="资源名称">
+                    </div>
+                    <div class="form-group">
+                        <label>资源类型</label>
+                        <input type="text" name="resType" class="form-control" required="required"  placeholder="资源类型">
+                        <input type="hidden" name="parentId" id="parentId" class="form-control" required="required"  placeholder="parentId">
+                    </div>
+                    <div class="form-group">
+                        <label>权限</label>
+                        <input type="text" name="permission" class="form-control" required="required"  placeholder="权限">
+                    </div>
+                    <div class="form-group">
+                        <label>url</label>
+                        <input type="text" name="url" class="form-control" required="required"  placeholder="url">
+                    </div>
+                    <div class="form-group">
+                        <label>icon</label>
+                        <input type="text" name="icon" class="form-control" required="required"  placeholder="icon">
+                    </div>
+                    <div class="form-group">
+                        <label>设置为最外层菜单</label><br>
+                        <input type="radio"  value="1" id="radio" name="optionsRadios">是</label>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">
+                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>关闭
+                        </button>
+                        <button type="button" class="btn btn-primary" id="save" data-dismiss="modal" @click.stop="save">
+                            <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true" ></span>保存
+                        </button>
+                    </div>
+                </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- 修改模态框 -->
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel"><span>修改</span></h4>
+                </div>
+                <form id="formDataE">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>资源名称</label>
+                            <input type="text" name="resName" id="resName"  class="form-control" required="required"  placeholder="资源名称">
+                        </div>
+                        <div class="form-group">
+                            <label>资源类型</label>
+                            <input type="text" name="resType" id="resType" class="form-control" required="required"  placeholder="资源类型">
+                            <input type="hidden" name="parentId" id="parentIdE" class="form-control" required="required"  placeholder="parentId">
+                            <input type="hidden" name="id" id="id" class="form-control" required="required"  placeholder="id">
+                            <input type="hidden" name="_method" value="PUT" class="form-control" required="required"  placeholder="">
+                        </div>
+                        <div class="form-group">
+                            <label>权限</label>
+                            <input type="text" name="permission" id="permission" class="form-control" required="required"  placeholder="权限">
+                        </div>
+                        <div class="form-group">
+                            <label>url</label>
+                            <input type="text" name="url" id="url" class="form-control" required="required"  placeholder="url">
+                        </div>
+                        <div class="form-group">
+                            <label>icon</label>
+                            <input type="text" name="icon" id="icon" class="form-control" required="required"  placeholder="icon">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">
+                                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>关闭
+                            </button>
+                            <button type="button" class="btn btn-primary" id="edit" data-dismiss="modal">
+                                <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true" ></span>保存
+                            </button>
+                        </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script src="js/jquery.min.js?v=2.1.4"></script>
+<script src="js/bootstrap.min.js?v=3.3.6"></script>
+<script src="https://cdn.bootcss.com/bootstrap-table/1.12.1/bootstrap-table.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap-table/1.12.0/extensions/treegrid/bootstrap-table-treegrid.js"></script>
+<script src="https://cdn.bootcss.com/jquery-treegrid/0.2.0/js/jquery.treegrid.min.js"></script>
+
+<!--<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script src="https://cdn.staticfile.org/vue-resource/1.5.1/vue-resource.min.js"></script>-->
+<script type="text/javascript">
+    var $table = $('#table');
+
+
+    $(function() {
+
+        $table.bootstrapTable({
+            url: 'http://127.0.0.1:8085/sysPermission',
+            idField: 'id',
+            dataType:'json',
+            columns: [
+                { field: 'check',  checkbox: true, formatter: function (value, row, index) {
+                        if (row.check == true) {
+                            // console.log(row.serverName);
+                            //设置选中
+                            return {  checked: true };
+                        }
+                    }
+                },
+                { field: 'resName',  title: '资源名称' },
+                { field: 'resType',  title: '资源类型' },
+                // {field: 'id', title: '编号', sortable: true, align: 'center'},
+                // {field: 'pid', title: '所属上级'},
+                { field: 'status',  title: '状态', sortable: true,  align: 'center', formatter: 'statusFormatter'  },
+                { field: 'permission', title: '权限值'  },
+                { field: 'url', title: 'url'  },
+                { field: 'icon', title: 'icon'  },
+                { field: 'operate', title: '操作', align: 'center', events : operateEvents, formatter: 'operateFormatter' },
+            ],
+
+            // bootstrap-table-treegrid.js 插件配置 -- start
+
+            //在哪一列展开树形
+            treeShowField: 'resName',
+            //指定父id列
+            parentIdField: 'parentId',
+
+            onResetView: function(data) {
+                //console.log('load');
+                $table.treegrid({
+                    initialState: 'collapsed',// 所有节点都折叠
+                    // initialState: 'expanded',// 所有节点都展开，默认展开
+                    treeColumn: 1,
+                    // expanderExpandedClass: 'glyphicon glyphicon-minus',  //图标样式
+                    // expanderCollapsedClass: 'glyphicon glyphicon-plus',
+                    onChange: function() {
+                        $table.bootstrapTable('resetWidth');
+                    }
+                });
+
+                //只展开树形的第一级节点
+                $table.treegrid('getRootNodes').treegrid('expand');
+
+            },
+            onCheck:function(row){
+                var datas = $table.bootstrapTable('getData');
+                // 勾选子类
+                selectChilds(datas,row,"id","pid",true);
+
+                // 勾选父类
+                selectParentChecked(datas,row,"id","pid")
+
+                // 刷新数据
+                $table.bootstrapTable('load', datas);
+            },
+
+            onUncheck:function(row){
+                var datas = $table.bootstrapTable('getData');
+                selectChilds(datas,row,"id","pid",false);
+                $table.bootstrapTable('load', datas);
+            },
+            // bootstrap-table-treetreegrid.js 插件配置 -- end
         });
 
-    </script>
-</body>
+        //添加
+        $("#save").click(function () {
+
+            if ($("#radio").is(":checked") == true){
+                $("#parentId").val(0);
+            }
+            $.ajax({
+                url: "http://127.0.0.1:8085/sysPermission/",
+                type: "POST",
+                dataType: "json",
+                data: $("#formData").serialize(),
+                success: function (data) {
+                    if (data == true) {
+                        $("#table").bootstrapTable('refresh');
+                    }
+                }
+            })
+        })
+
+        //修改
+        $("#edit").click(function () {
+            $.ajax({
+                url: "http://127.0.0.1:8085/sysPermission/",
+                type: "POST",
+                dataType: "json",
+                data: $("#formDataE").serialize(),
+                success: function (data) {
+                    if (data == true) {
+                        $("#table").bootstrapTable('refresh');
+                    }
+                }
+            })
+        })
+
+    });
+
+    // 格式化按钮
+    function operateFormatter(value, row, index) {
+        return [
+            '<button type="button" class="RoleOfadd btn-small  btn-primary" style="margin-right:15px;"><i class="fa fa-plus" ></i>&nbsp;新增</button>',
+            '<button type="button" class="RoleOfedit btn-small   btn-primary" style="margin-right:15px;"><i class="fa fa-pencil-square-o" ></i>&nbsp;修改</button>',
+            '<button type="button" class="RoleOfdelete btn-small   btn-primary" style="margin-right:15px;"><i class="fa fa-trash-o" ></i>&nbsp;删除</button>'
+        ].join('');
+
+    }
+    // 格式化类型
+    function typeFormatter(value, row, index) {
+        if (value === 'menu') {  return '菜单';  }
+        if (value === 'button') {  return '按钮'; }
+        if (value === 'api') {  return '接口'; }
+        return '-';
+    }
+    // 格式化状态
+    function statusFormatter(value, row, index) {
+        if (value === 1) {
+            return '<span class="label label-success">正常</span>';
+        } else {
+            return '<span class="label label-default">锁定</span>';
+        }
+    }
+
+    //初始化操作按钮的方法
+    window.operateEvents = {
+        'click .RoleOfadd': function (e, value, row, index) {
+            add(row.id);
+        },
+        'click .RoleOfdelete': function (e, value, row, index) {
+            del(row.id);
+        },
+        'click .RoleOfedit': function (e, value, row, index) {
+            update(row);
+        }
+    };
+</script>
+<script>
+    /**
+     * 选中父项时，同时选中子项
+     * @param datas 所有的数据
+     * @param row 当前数据
+     * @param id id 字段名
+     * @param pid 父id字段名
+     */
+    function selectChilds(datas,row,id,pid,checked) {
+        for(var i in datas){
+            if(datas[i][pid] == row[id]){
+                datas[i].check=checked;
+                selectChilds(datas,datas[i],id,pid,checked);
+            };
+        }
+    }
+
+    function selectParentChecked(datas,row,id,pid){
+        for(var i in datas){
+            if(datas[i][id] == row[pid]){
+                datas[i].check=true;
+                selectParentChecked(datas,datas[i],id,pid);
+            };
+        }
+    }
+
+    function delBatch() {
+        var selRows = $table.bootstrapTable("getSelections");
+        if(selRows.length == 0){
+            alert("请至少选择一行");
+            return;
+        }
+        var postData = "";
+        $.each(selRows,function(i) {
+            postData +=  this.id;
+            if (i < selRows.length - 1) {
+                postData += ",";
+            }
+        });
+        del(postData);
+    }
+
+    function del(ids) {
+        $.ajax({
+            url: "http://127.0.0.1:8085/sysPermission/" + ids,
+            type: "POST",
+            dataType: "json",
+            data: {_method: "delete"},
+            success: function (data) {
+                if (data == true) {
+                    $("#table").bootstrapTable('refresh');
+                }
+            }
+        })
+    }
+
+    function add(id) {
+        $('#myModal').modal();
+        $("#parentId").val(id);
+    }
 
 
-<!-- Mirrored from www.zi-han.net/theme/hplus/table_bootstrap.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 20 Jan 2016 14:20:06 GMT -->
+    function update(row) {
+        console.log(row)
+        $('#editModal').modal();
+        $("#parentIdE").val(row.parentId);
+        $("#id").val(row.id);
+        $("#resName").val(row.resName);
+        $("#resType").val(row.resType);
+        $("#permission").val(row.permission);
+        $("#url").val(row.url);
+        $("#icon").val(row.icon);
+    }
+
+</script>
+<script type="text/javascript">
+
+    var bm = new Vue({
+        el: '#appP',
+        data: {
+            roleName: '',
+            flag: true
+        },
+        beforeCreate() {
+
+        },
+        methods: {
+            addModel() {
+                $('#myModal').modal();
+
+            },
+            save() {
+                this.$http.post('http://127.0.0.1:8085/sysPermission', {}, {emulateJSON: true}).then(function (res) {
+                    if (res.status == 200) {
+                        $("#myModal").modal('hide');
+                        $("#table").bootstrapTable('refresh');
+                    }
+                }, function (res) {
+                    console.log(res.status);
+                });
+            },
+
+            edi() {
+                $('#myModal').modal();
+            }
+
+        },
+        // 渲染后执行
+        mounted() {
+            // this.getMenus(); // 调用数据初始化函数
+        },
+    })
+
+</script>
 </html>
