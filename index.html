@@ -22,7 +22,7 @@
     <link href="css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
     <link href="css/animate.min.css" rel="stylesheet">
     <link href="css/style.min862f.css?v=4.1.0" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="js/vue.js"></script>
     <script src="https://cdn.staticfile.org/vue-resource/1.5.1/vue-resource.min.js"></script>
 </head>
 
@@ -389,6 +389,7 @@
                 </ul>
             </div>
         </nav>
+
         <!--左侧导航结束-->
         <!--右侧部分开始-->
         <div id="page-wrapper" class="gray-bg dashbard-1">
@@ -943,63 +944,19 @@
 
     <script type="text/javascript">
 
+
         var vm = new Vue({
             el: '#app',
             data: {
                 menus: [
-                    {
-                        "id": 1,
-                        "parentId": 0,
-                        "resName": "系统管理",
-                        "resType": "menu",
-                        "permission": "system",
-                        "url": "",
-                        "icon": "&#xe6b8;"
-                    },
-                    {
-                        "id": 2,
-                        "parentId": 1,
-                        "resName": "用户管理",
-                        "resType": "menu",
-                        "permission": "",
-                        "url": "user.html",
-                        "icon": "&#xe696;"
-                    },
-                    {
-                        "id": 3,
-                        "parentId": 1,
-                        "resName": "角色管理",
-                        "resType": "menu",
-                        "permission": "systemRole",
-                        "url": "/roles",
-                        "icon": "&#xe698;"
-                    },
                     {
                         "id": 4,
                         "parentId": 0,
                         "resName": "权限菜单",
                         "resType": "menu",
                         "permission": "menu",
-                        "url": "/perm",
-                        "icon": "&#xe6a0;"
-                    },
-                    {
-                        "id": 5,
-                        "parentId": 4,
-                        "resName": "用户管理",
-                        "resType": "menu",
-                        "permission": "menuXxx",
-                        "url": "user.html",
-                        "icon": "&#xe699;"
-                    },
-                    {
-                        "id": 6,
-                        "parentId": 4,
-                        "resName": "菜单管理",
-                        "resType": "menu",
-                        "permission": "menuYyy",
-                        "url": "permission.html",
-                        "icon": "&#xe6a2;"
+                        "url": "perm",
+                        "icon": ""
                     },
                     {
                         "id": 7,
@@ -1007,29 +964,37 @@
                         "resName": "用户添加",
                         "resType": "button",
                         "permission": "systemUserAdd",
-                        "url": null,
-                        "icon": "&#xe69c;"
+                        "url": "xxx",
+                        "icon": ""
                     },
                     {
                         "id": 8,
                         "parentId": 4,
                         "resName": "角色管理",
                         "resType": "menu",
-                        "permission": null,
-                        "url": "role.html",
-                        "icon": "&#xe6a3;"
+                        "permission": "11",
+                        "url": "table.html",
+                        "icon": ""
                     },
                     {
                         "id": 9,
                         "parentId": 4,
                         "resName": "资源管理",
                         "resType": "menu",
-                        "permission": null,
+                        "permission": "1",
                         "url": "permission.html",
-                        "icon": "&#xe6a4;"
+                        "icon": ""
+                    },
+                    {
+                        "id": 18,
+                        "parentId": 4,
+                        "resName": "用户管理",
+                        "resType": "menu",
+                        "permission": "user",
+                        "url": "user.html",
+                        "icon": ""
                     }
-                ]
-            },
+                ]            },
             methods: {
                /* getMenus(){
                     //发送get请求
@@ -1038,13 +1003,29 @@
                         this.menus = res.data;
                     },function(){
                         console.log('请求失败处理');
-                    });
-                    /!* $.get("http://127.0.0.1:8085/sysPermission",function(data,status){
-                         console.log(data)
-                         this.menus = data;
-                         this.title = 'sd';
-                     });*!/
-                }*/
+                    });*/
+                  /*  $.ajax({
+                        url: "http://127.0.0.1:8085/sysPermission/",
+                        type: "get",
+                        dataType: "json",
+                        data: {},
+                        success: function (data) {
+                            this.menus = data;
+                            console.log(this.menus)
+                            if (data != null) {
+
+                            }
+                        }
+                    })*/
+
+
+
+                /* $.get("http://127.0.0.1:8085/sysPermission",function(data,status){
+                console.log(data)
+                this.menus = data;
+                this.title = 'sd';
+                });*/
+
             },
             // 渲染后执行
             mounted() {

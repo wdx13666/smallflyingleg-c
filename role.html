@@ -175,7 +175,7 @@
 
     $(function () {
         //1.初始化Table
-        var oTable = new TableInit('#table', 'http://127.0.0.1:8085/sysRole', defaultColunms);
+        var oTable = new TableInit('#table', 'http://127.0.0.1:8085/sysRole', defaultColunms,$("#roleName").val());
         oTable.Init();
 
         //2.初始化Button的点击事件

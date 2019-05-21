@@ -1,4 +1,4 @@
-var TableInit = function (tableId,url,cloums) {
+var TableInit = function (tableId,url,cloums,q) {
     var oTableInit = new Object();
     //初始化Table
     oTableInit.Init = function () {
@@ -20,6 +20,7 @@ var TableInit = function (tableId,url,cloums) {
             strictSearch: true,
             showColumns: true,                  //是否显示所有的列
             showRefresh: true,                  //是否显示刷新按钮
+            q:q,
             icons: {
                 refresh: "glyphicon-repeat",
                 toggle: "glyphicon-list-alt",
@@ -39,14 +40,13 @@ var TableInit = function (tableId,url,cloums) {
 
     //得到查询的参数
     oTableInit.queryParams = function (params) {
-        console.log(params)
         var temp = {   //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
             pageSize: params.limit,   //页面大小
            /* offset: params.offset,  //页码
             roleName: $("#txt_search_departmentname").val(),
 
             statu: $("#txt_search_statu").val(),*/
-            roleName:params.search,
+            q:params.search,
             pageNumber: (params.offset / params.limit) + 1,
         };
         console.log(params)

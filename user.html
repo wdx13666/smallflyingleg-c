@@ -23,9 +23,36 @@
     <script src="https://cdn.bootcss.com/bootstrap-table/1.12.0/extensions/treegrid/bootstrap-table-treegrid.js"></script>
     <script src="https://cdn.bootcss.com/jquery-treegrid/0.2.0/js/jquery.treegrid.min.js"></script>
     <script src="js/tree.js"></script>
+    <script src="js/qrious.min.js"></script>
+    <script type="text/javascript">
+
+        // queryPayStatus();//调用查询
+    </script>
 </head>
 <body class="gray-bg">
 <div id="app">
+
+    <div class="checkout-steps">
+        <div class="fl weixin">微信支付</div>
+        <div class="fl sao">
+            <p class="red"></p>
+            <div class="fl code">
+                <img src="" id="qrious">
+                <!--<static/img/ id="qrious">-->
+                <div class="saosao">
+                    <p>请使用微信扫一扫</p>
+                    <p>扫描二维码支付</p>
+                </div>
+            </div>
+            <div class="fl phone">
+
+            </div>
+
+        </div>
+        <div class="clearfix"></div>
+        <p><a href="pay.html" target="_blank">> 其他支付方式</a></p>
+    </div>
+
     <div class="wrapper wrapper-content animated fadeInRight">
         <div class="ibox float-e-margins">
 
@@ -66,14 +93,22 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                                 aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel"><span>{{flag ? "新增" : "修改"}}</span></h4>
+                    <h4 class="modal-title" id="myModalLabel"><span>新增</span></h4>
                 </div>
+                <form id="formData">
                 <div class="modal-body">
                     <div class="form-group">
-                        <label>角色名称</label>
-                        <input type="text" v-model="roleName" class="form-control" required="required"  placeholder="角色名称">
+                        <label>账号</label>
+                        <input type="text" v-model="userName" class="form-control"  required placeholder="请输入账号">
                     </div>
-                        <table class="treeTable" data-mobile-responsive="true"></table>
+                    <div class="form-group">
+                        <label>密码</label>
+                        <input type="password" v-model="password" class="form-control" required placeholder="请输入密码">
+                    </div>
+                    <div class="form-group">
+                        <label>姓名</label>
+                        <input type="text" v-model="fullName" class="form-control" required placeholder="请输入姓名">
+                    </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">
                             <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>关闭
@@ -83,6 +118,7 @@
                         </button>
                     </div>
                 </div>
+                </form>
             </div>
         </div>
     </div>
@@ -97,13 +133,22 @@
                                 aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title" id="myModalLabel"><span>修改</span></h4>
                 </div>
+                <form id="formData">
                 <div class="modal-body">
                     <div class="form-group">
-                        <label>角色名称</label>
-                        <input type="text" name="roleName" class="form-control" id="roleName" required placeholder="角色名称">
-                        <input type="hidden" name="roleId" class="form-control" id="roleId" placeholder="角色id">
+                        <label>账号</label>
+                        <input type="text" name="userName" class="form-control" id="userName" required placeholder="请输入账号">
+                        <input type="hidden" name="userId" class="form-control" id="userId" placeholder="用户id">
+                        <input type="hidden" name="_method" class="form-control" value="put">
                     </div>
-                    <table class="treeTable" data-mobile-responsive="true"></table>
+                    <div class="form-group">
+                        <label>密码</label>
+                        <input type="password" name="password" class="form-control" id="password" required placeholder="请输入密码">
+                    </div>
+                    <div class="form-group">
+                        <label>姓名</label>
+                        <input type="text" name="fullName" class="form-control" id="fullName" required placeholder="请输入姓名">
+                    </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">
                             <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>关闭
@@ -113,6 +158,7 @@
                         </button>
                     </div>
                 </div>
+                </form>
             </div>
         </div>
     </div>
@@ -124,25 +170,24 @@
 
 
     //修改模态框
-    function EditViewById(id, name) {
+    function EditViewById(id) {
         $('#editModal').modal();
         $.ajax({
-            url: 'http://127.0.0.1:8085/sysRole/' + id,
+            url: 'http://127.0.0.1:8085/sysUser/' + id,
             dataType: 'json',
             type: 'get',
             data: {},
             success: function (data) {
                 console.log(data)
                 if (data != null) {
-                    $.each(data,function (i) {
-                        
-                    })
+                    $("#userName").val(data.userName);
+                    $("#fullName").val(data.fullName);
+                    $("#password").val(data.password);
+                    $("#userId").val(data.userId);
                     $("#table").bootstrapTable('refresh');
                 }
             }
         })
-        $("#roleName").val(name);
-        $("#roleId").val(id);
     }
 
 
@@ -153,7 +198,7 @@
         },  //给多选框赋一个field值为“checkStatus”用于更改选择状态!!!!!
 
         {
-            field: 'roleId',
+            field: 'userId',
             title: 'id',
             align: 'center'
         }, {
@@ -170,16 +215,16 @@
             align: 'center',
             formatter: function (value, row, index) {
                 var result = "";
-                result += "<a href='javascript:;' class='btn btn-xs green' onclick=\"EditViewById('" + row.roleId + "', view='view')\" title='查看'><span class='glyphicon glyphicon-search'></span></a>";
-                result += "<a href='javascript:;' class='btn btn-xs blue'  onclick=\"EditViewById('" + row.roleId + "','" + row.roleName + "')\" title='编辑'><span class='glyphicon glyphicon-pencil'></span></a>";
-                result += "<a href='javascript:;' class='btn btn-xs red'  title='删除'  onclick=\"DelViewById('" + row.roleId + "')\"><span class='glyphicon glyphicon-remove'></span></a>";
+                // result += "<a href='javascript:;' class='btn btn-xs green' onclick=\"EditViewById('" + row.userId + "', view='view')\" title='查看'><span class='glyphicon glyphicon-search'></span></a>";
+                result += "<a href='javascript:;' class='btn btn-xs blue'  onclick=\"EditViewById('" + row.userId + "')\" title='编辑'><span class='glyphicon glyphicon-pencil'></span></a>";
+                result += "<a href='javascript:;' class='btn btn-xs red'  title='删除'  onclick=\"DelViewById('" + row.userId + "')\"><span class='glyphicon glyphicon-remove'></span></a>";
                 return result;
             }
         }];
 
     $(function () {
         //1.初始化Table
-        var oTable = new TableInit('#table', 'http://127.0.0.1:8085/sysUser', defaultColunms);
+        var oTable = new TableInit('#table', 'http://127.0.0.1:8085/sysUser', defaultColunms,$("#userName").val());
         oTable.Init();
 
         //2.初始化Button的点击事件
@@ -189,12 +234,11 @@
 
         //修改
         $("#edit").on("click", function () {
-
             $.ajax({
-                url: 'http://127.0.0.1:8085/sysRole',
+                url: 'http://127.0.0.1:8085/sysUser',
                 dataType: 'json',
                 type: 'post',
-                data: {_method: "put", roleName: $("#roleName").val(),roleId:$("#roleId").val()},
+                data: $("#formData").serialize(),
                 success: function (data) {
                     if (data == true) {
                         $("#table").bootstrapTable('refresh');
@@ -214,7 +258,7 @@
             } else {
                 var arrays = new Array();// 声明一个数组
                 $(rows).each(function () {// 通过获得别选中的来进行遍历
-                    arrays.push(this.roleId);// cid为获得到的整条数据中的一列
+                    arrays.push(this.userId);// cid为获得到的整条数据中的一列
                 });
                 var ids = arrays.join(','); // 获得要删除的id
                 // 批量删除
@@ -231,7 +275,7 @@
 
     function del(ids) {
         $.ajax({
-            url: "http://127.0.0.1:8085/sysRole/" + ids,
+            url: "http://127.0.0.1:8085/sysUser/" + ids,
             type: "POST",
             dataType: "json",
             data: {_method: "delete"},
@@ -246,8 +290,10 @@
     var vm = new Vue({
         el: '#app',
         data: {
-            roleName: '',
-            flag: true
+            userName: '',
+            flag: true,
+            password:'',
+            fullName:''
         },
         beforeCreate() {
 
@@ -255,28 +301,27 @@
         methods: {
             addModel() {
                 $('#myModal').modal();
-
-
-
             },
             save() {
-                var selRows = $("#treeTable").bootstrapTable("getSelections");
-                if(selRows.length == 0){
-                    alert("请至少选择一行");
-                    return;
-                }
-                var postData = "";
-                $.each(selRows,function(i) {
-                    postData +=  this.id;
-                    if (i < selRows.length - 1) {
-                        postData += ",";
-                    }
-                });
-                this.$http.post('http://127.0.0.1:8085/sysRole', {roleName: this.roleName,ids:postData}, {emulateJSON: true}).then(function (res) {
+                this.$http.post('http://127.0.0.1:8085/sysUser', {userName: this.userName,fullName:this.fullName,password:this.password}, {emulateJSON: true}).then(function (res) {
                     if (res.status == 200) {
                         $("#myModal").modal('hide');
                         $("#table").bootstrapTable('refresh');
                     }
+                }, function (res) {
+                    console.log(res.status);
+                });
+            },
+            createNative(){
+                this.$http.get('http://127.0.0.1:8085/pay/createNative').then(function (res) {
+                    console.log(res);
+                    //生成二维码
+                    var qr=new QRious({
+                        element:document.getElementById('qrious'),
+                        size:250,
+                        value:res.body.code_url,
+                        level:'H'
+                    });
                 }, function (res) {
                     console.log(res.status);
                 });
@@ -290,6 +335,7 @@
         // 渲染后执行
         mounted() {
             // this.getMenus(); // 调用数据初始化函数
+           this.createNative();
         },
     })
 
