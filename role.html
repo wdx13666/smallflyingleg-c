@@ -9,7 +9,6 @@
     <script src="js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
     <script src="js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
     <script src="js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
-    <script type="text/javascript" src="http://tajs.qq.com/stats?sId=9051096" charset="UTF-8"></script>
     <script type="text/javascript" src="js/table.js" charset="UTF-8"></script>
     <link rel="shortcut icon" href="favicon.ico">
     <link href="css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
@@ -17,26 +16,28 @@
     <link href="css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.bootcss.com/jquery-treegrid/0.2.0/css/jquery.treegrid.min.css">
     <link href="css/animate.min.css" rel="stylesheet">
+    <link href="js/ztree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet">
     <link href="css/style.min862f.css?v=4.1.0" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
     <script src="https://cdn.staticfile.org/vue-resource/1.5.1/vue-resource.min.js"></script>
     <script src="https://cdn.bootcss.com/bootstrap-table/1.12.0/extensions/treegrid/bootstrap-table-treegrid.js"></script>
     <script src="https://cdn.bootcss.com/jquery-treegrid/0.2.0/js/jquery.treegrid.min.js"></script>
     <script src="js/tree.js"></script>
+    <script src="js/ztree/js/jquery.ztree.core.min.js"></script>
+    <script src="js/ztree/js/jquery.ztree.excheck.min.js"></script>
 </head>
 <body class="gray-bg">
-<div id="app">
+<div id="role">
     <div class="wrapper wrapper-content animated fadeInRight">
         <div class="ibox float-e-margins">
 
             <div class="col-sm-12">
                 <!-- Example Events -->
-                <div class="example-wrap">
-                    <h4 class="example-title">事件</h4>
+                <!--<h4 class="example-title">事件</h4>
                     <div class="example">
                         <div class="alert alert-success" id="examplebtTableEventsResult" role="alert">
                             事件结果
-                        </div>
+                        </div>-->
                         <div class="btn-group hidden-xs" id="toolbar" role="group">
                             <button type="button" @click="addModel" class="btn btn-outline btn-default">
                                 <i class="glyphicon glyphicon-plus" aria-hidden="true"></i>
@@ -58,7 +59,6 @@
         </div>
     </div>
     <!-- End Panel Other -->
-
     <!-- 添加模态框 -->
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
@@ -66,14 +66,17 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                                 aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel"><span>{{flag ? "新增" : "修改"}}</span></h4>
+                    <h4 class="modal-title" id="myModalLabel"><span>新增</span></h4>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
                         <label>角色名称</label>
                         <input type="text" v-model="roleName" class="form-control" required="required"  placeholder="角色名称">
                     </div>
-                        <table class="treeTable" data-mobile-responsive="true"></table>
+                        <!--<table class="treeTable" data-mobile-responsive="true"></table>-->
+                        <div>
+                            <ul id="tree" class="ztree"></ul>
+                        </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">
                             <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>关闭
@@ -102,8 +105,9 @@
                         <label>角色名称</label>
                         <input type="text" name="roleName" class="form-control" id="roleName" required placeholder="角色名称">
                         <input type="hidden" name="roleId" class="form-control" id="roleId" placeholder="角色id">
+                        <input type="hidden" name="ids" class="form-control" id="ids" placeholder="角色id">
                     </div>
-                    <table class="treeTable" data-mobile-responsive="true"></table>
+                    <ul id="uztree" class="ztree"></ul>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">
                             <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>关闭
@@ -123,27 +127,6 @@
 <script type="text/javascript">
 
 
-    //修改模态框
-    function EditViewById(id, name) {
-        $('#editModal').modal();
-        $.ajax({
-            url: 'http://127.0.0.1:8085/sysRole/' + id,
-            dataType: 'json',
-            type: 'get',
-            data: {},
-            success: function (data) {
-                console.log(data)
-                if (data != null) {
-                    $.each(data,function (i) {
-                        
-                    })
-                    $("#table").bootstrapTable('refresh');
-                }
-            }
-        })
-        $("#roleName").val(name);
-        $("#roleId").val(id);
-    }
 
 
     var defaultColunms = [
@@ -166,14 +149,16 @@
             align: 'center',
             formatter: function (value, row, index) {
                 var result = "";
-                result += "<a href='javascript:;' class='btn btn-xs green' onclick=\"EditViewById('" + row.roleId + "', view='view')\" title='查看'><span class='glyphicon glyphicon-search'></span></a>";
+                result += "<a href='javascript:;' class='btn btn-xs green' onclick=\"EditViewByIda('" + row.roleId + "', view='view')\" title='查看'><span class='glyphicon glyphicon-search'></span></a>";
                 result += "<a href='javascript:;' class='btn btn-xs blue'  onclick=\"EditViewById('" + row.roleId + "','" + row.roleName + "')\" title='编辑'><span class='glyphicon glyphicon-pencil'></span></a>";
                 result += "<a href='javascript:;' class='btn btn-xs red'  title='删除'  onclick=\"DelViewById('" + row.roleId + "')\"><span class='glyphicon glyphicon-remove'></span></a>";
                 return result;
             }
         }];
 
+
     $(function () {
+
         //1.初始化Table
         var oTable = new TableInit('#table', 'http://127.0.0.1:8085/sysRole', defaultColunms,$("#roleName").val());
         oTable.Init();
@@ -182,30 +167,24 @@
         var oButtonInit = new ButtonInit();
         oButtonInit.Init();
 
-        var c = [
-            { field: 'check',  checkbox: true, formatter: function (value, row, index) {
-                    if (row.check == true) {
-                        // console.log(row.serverName);
-                        //设置选中
-                        return {  checked: true };
-                    }
-                }
-            },
-            { field: 'resName',  title: '资源名称' },
-
-        ];
-        //1.初始化Table
-        var tableTree = new TableTree('.treeTable', 'http://127.0.0.1:8085/sysPermission', c);
-        tableTree.Init();
 
         //修改
         $("#edit").on("click", function () {
 
+            var treeObj = $.fn.zTree.getZTreeObj("tree");
+            var  nodes = treeObj.getCheckedNodes(true);
+            var postData = "";
+            $.each(nodes,function(i) {
+                postData +=  this.id;
+                if (i < nodes.length - 1) {
+                    postData += ",";
+                }
+            });
             $.ajax({
                 url: 'http://127.0.0.1:8085/sysRole',
                 dataType: 'json',
                 type: 'post',
-                data: {_method: "put", roleName: $("#roleName").val(),roleId:$("#roleId").val()},
+                data: {_method: "put", roleName: $("#roleName").val(),roleId:$("#roleId").val(),ids:postData},
                 success: function (data) {
                     if (data == true) {
                         $("#table").bootstrapTable('refresh');
@@ -253,12 +232,79 @@
             }
         })
     }
+    //获取选中的id
+    function permissionCheck(e,treeId,treeNode) {
+        var treeObj = $.fn.zTree.getZTreeObj("tree");
+        var  nodes = treeObj.getCheckedNodes(true);
+        var idA = new Array();
+        for (var i=0;i<nodes.length;i++){
+            idA.push( nodes[i].id );
+        }
+        return idA;
+    }
+
+
+        var zTreeObj;
+        // zTree 的参数配置，深入使用请参考 API 文档（setting 配置详解）
+        var setting = {
+            check: {
+                enable: true
+            },
+            data: {
+                key: {
+                    name: "resName",
+                    url: "aaaa"
+                },
+                simpleData: {
+                    enable: true,
+                    idKey: "id",
+                    pIdKey: "parentId",
+
+                }
+            },
+            callback: {
+                beforeCheck: true,
+                onCheck: permissionCheck
+            }
+        }
+
+    //修改模态框
+    function EditViewById(id, name) {
+        $('#editModal').modal();
+        $.ajax({
+            url: 'http://127.0.0.1:8085/sysPermission',
+            dataType: 'json',
+            type: 'get',
+            data: {},
+            success: function (data) {
+                zTreeObj = $.fn.zTree.init($(".ztree"), setting, data);
+                zTreeObj.expandAll(true);
+            }
+        })
+        $.ajax({
+            url: 'http://127.0.0.1:8085/sysPermission/role/' + id,
+            dataType: 'json',
+            type: 'get',
+            data: {},
+            success: function (data) {
+                for (var i=0; i <data.length; i ++){
+                    zTreeObj.checkNode(zTreeObj.getNodeByParam("id", data[i].id),true,true);
+                }
+
+            }
+        })
+        $("#roleName").val(name);
+        $("#roleId").val(id);
+    }
+
 
     var vm = new Vue({
-        el: '#app',
+        el: '#role',
         data: {
             roleName: '',
-            flag: true
+            flag: true,
+            zNodes: [],
+            idArr:[]
         },
         beforeCreate() {
 
@@ -266,23 +312,33 @@
         methods: {
             addModel() {
                 $('#myModal').modal();
+                this.$http.get('http://127.0.0.1:8085/sysPermission').then(function (res) {
+                    if (res.status == 200) {
+                        this.zNodes = res.body;
+                        //初始化zTree
+                        zTreeObj = $.fn.zTree.init($(".ztree"), setting, this.zNodes);
+                        zTreeObj.expandAll(true);
 
+                    }
+                }, function (res) {
+                    console.log(res.status);
+                });
 
 
             },
             save() {
-                var selRows = $("#treeTable").bootstrapTable("getSelections");
-                if(selRows.length == 0){
-                    alert("请至少选择一行");
-                    return;
-                }
+                var treeObj = $.fn.zTree.getZTreeObj("tree");
+                var  nodes = treeObj.getCheckedNodes(true);
                 var postData = "";
-                $.each(selRows,function(i) {
+                $.each(nodes,function(i) {
                     postData +=  this.id;
-                    if (i < selRows.length - 1) {
+                    if (i < nodes.length - 1) {
                         postData += ",";
                     }
                 });
+
+                console.log(postData);
+
                 this.$http.post('http://127.0.0.1:8085/sysRole', {roleName: this.roleName,ids:postData}, {emulateJSON: true}).then(function (res) {
                     if (res.status == 200) {
                         $("#myModal").modal('hide');
@@ -292,7 +348,6 @@
                     console.log(res.status);
                 });
             },
-
             edi() {
                 $('#myModal').modal();
             }

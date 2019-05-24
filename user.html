@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -18,27 +18,24 @@
     <link rel="stylesheet" href="https://cdn.bootcss.com/jquery-treegrid/0.2.0/css/jquery.treegrid.min.css">
     <link href="css/animate.min.css" rel="stylesheet">
     <link href="css/style.min862f.css?v=4.1.0" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="js/vue.js"></script>
     <script src="https://cdn.staticfile.org/vue-resource/1.5.1/vue-resource.min.js"></script>
     <script src="https://cdn.bootcss.com/bootstrap-table/1.12.0/extensions/treegrid/bootstrap-table-treegrid.js"></script>
     <script src="https://cdn.bootcss.com/jquery-treegrid/0.2.0/js/jquery.treegrid.min.js"></script>
     <script src="js/tree.js"></script>
     <script src="js/qrious.min.js"></script>
-    <script type="text/javascript">
 
-        // queryPayStatus();//调用查询
-    </script>
 </head>
 <body class="gray-bg">
 <div id="app">
 
-    <div class="checkout-steps">
+   <!-- <div class="checkout-steps">
         <div class="fl weixin">微信支付</div>
         <div class="fl sao">
             <p class="red"></p>
             <div class="fl code">
                 <img src="" id="qrious">
-                <!--<static/img/ id="qrious">-->
+                <!--<static/img/ id="qrious">&ndash;&gt;
                 <div class="saosao">
                     <p>请使用微信扫一扫</p>
                     <p>扫描二维码支付</p>
@@ -51,7 +48,7 @@
         </div>
         <div class="clearfix"></div>
         <p><a href="pay.html" target="_blank">> 其他支付方式</a></p>
-    </div>
+    </div>-->
 
     <div class="wrapper wrapper-content animated fadeInRight">
         <div class="ibox float-e-margins">
@@ -59,11 +56,11 @@
             <div class="col-sm-12">
                 <!-- Example Events -->
                 <div class="example-wrap">
-                    <h4 class="example-title">事件</h4>
+                    <!--<h4 class="example-title">事件</h4>
                     <div class="example">
                         <div class="alert alert-success" id="examplebtTableEventsResult" role="alert">
                             事件结果
-                        </div>
+                        </div>-->
                         <div class="btn-group hidden-xs" id="toolbar" role="group">
                             <button type="button" @click="addModel" class="btn btn-outline btn-default">
                                 <i class="glyphicon glyphicon-plus" aria-hidden="true"></i>
@@ -83,7 +80,7 @@
                 <!-- End Example Events -->
             </div>
         </div>
-    </div>
+
     <!-- End Panel Other -->
 
     <!-- 添加模态框 -->
@@ -95,7 +92,7 @@
                                 aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title" id="myModalLabel"><span>新增</span></h4>
                 </div>
-                <form id="formData">
+                <form id="formDataAdd">
                 <div class="modal-body">
                     <div class="form-group">
                         <label>账号</label>
@@ -108,6 +105,14 @@
                     <div class="form-group">
                         <label>姓名</label>
                         <input type="text" v-model="fullName" class="form-control" required placeholder="请输入姓名">
+                    </div>
+                    <div class="form-group">
+                        <label >内联复选框</label></br>
+                        <div class="">
+                            <label  v-for="role in roleList" :key="role.roleId">
+                                <input type="checkbox" v-model="checkNames" :value="role.roleId">{{role.roleName}}&nbsp;&nbsp;&nbsp;
+                            </label>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">
@@ -133,7 +138,7 @@
                                 aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title" id="myModalLabel"><span>修改</span></h4>
                 </div>
-                <form id="formData">
+                <form id="formDataEdit">
                 <div class="modal-body">
                     <div class="form-group">
                         <label>账号</label>
@@ -148,6 +153,15 @@
                     <div class="form-group">
                         <label>姓名</label>
                         <input type="text" name="fullName" class="form-control" id="fullName" required placeholder="请输入姓名">
+                    </div>
+                    <div class="form-group">
+                        <label >内联复选框</label></br>
+                        <div class="">{{checkNames}}|| {{checkIds}}
+                            <label  v-for="role in roleList" :key="role.roleId">
+                                <input type="checkbox" v-model="checkNames"  :value="role.roleId">{{role.roleName}}&nbsp;&nbsp;&nbsp;
+                                <input type="text" v-model="checkIds"  id="editCheck">
+                            </label>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">
@@ -166,12 +180,27 @@
 
 </div>
 
+</div>
+
 <script type="text/javascript">
 
 
     //修改模态框
     function EditViewById(id) {
         $('#editModal').modal();
+
+        $.ajax({
+            url: 'http://127.0.0.1:8085/sysUserRole/' + id,
+            dataType: 'json',
+            type: 'get',
+            data: {},
+            success: function (data) {
+                if (data != null) {
+                    $("#editCheck").val(data);
+                }
+            }
+        })
+
         $.ajax({
             url: 'http://127.0.0.1:8085/sysUser/' + id,
             dataType: 'json',
@@ -222,6 +251,9 @@
             }
         }];
 
+
+
+
     $(function () {
         //1.初始化Table
         var oTable = new TableInit('#table', 'http://127.0.0.1:8085/sysUser', defaultColunms,$("#userName").val());
@@ -238,7 +270,7 @@
                 url: 'http://127.0.0.1:8085/sysUser',
                 dataType: 'json',
                 type: 'post',
-                data: $("#formData").serialize(),
+                data: $("#formDataEdit").serialize(),
                 success: function (data) {
                     if (data == true) {
                         $("#table").bootstrapTable('refresh');
@@ -286,14 +318,17 @@
             }
         })
     }
-
+    console.log(2)
     var vm = new Vue({
         el: '#app',
         data: {
             userName: '',
             flag: true,
             password:'',
-            fullName:''
+            fullName:'',
+            roleList: {},
+            checkNames:[],
+            checkIds:[]
         },
         beforeCreate() {
 
@@ -303,10 +338,19 @@
                 $('#myModal').modal();
             },
             save() {
-                this.$http.post('http://127.0.0.1:8085/sysUser', {userName: this.userName,fullName:this.fullName,password:this.password}, {emulateJSON: true}).then(function (res) {
+                this.$http.post('http://127.0.0.1:8085/sysUser', {userName: this.userName,fullName:this.fullName,password:this.password,ids:this.checkNames.toString()}, {emulateJSON: true}).then(function (res) {
                     if (res.status == 200) {
                         $("#myModal").modal('hide');
                         $("#table").bootstrapTable('refresh');
+                    }
+                }, function (res) {
+                    console.log(res.status);
+                });
+            },
+            getRoles() {
+                this.$http.get('http://127.0.0.1:8085/sysRole/list').then(function (res) {
+                    if (res.status == 200) {
+                        this.roleList = res.body;
                     }
                 }, function (res) {
                     console.log(res.status);
@@ -336,6 +380,15 @@
         mounted() {
             // this.getMenus(); // 调用数据初始化函数
            this.createNative();
+            this.getRoles();
+            this.checkNames = this.checkIds;
+        },
+        watch: {
+            // 如果 `checkIds` 发生改变，这个函数就会运行
+            checkIds: function (newQuestion, oldQuestion) {
+                console.log(newQuestion   +   oldQuestion   + this.checkIds )
+                this.checkNames = this.checkIds;
+            }
         },
     })
 
